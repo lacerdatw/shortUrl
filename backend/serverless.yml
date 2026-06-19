@@ -10,7 +10,7 @@ provider:
     DYNAMODB_TABLE_USERS: ${self:service}-users-${sls:stage}
     JWT_SECRET: ${env:JWT_SECRET}
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN, '24h'}
-    BASE_URL: ${env:BASE_URL}
+    BASE_URL: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com'
   httpApi:
     cors:
       allowedOrigins: '*'
