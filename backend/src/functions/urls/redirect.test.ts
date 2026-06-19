@@ -17,7 +17,7 @@ describe('GET /:code', () => {
 
     const res = await handler(event('abc123'), {} as never, {} as never)
 
-    expect(res).toMatchObject({ statusCode: 301, headers: { Location: 'https://github.com' } })
+    expect(res).toMatchObject({ statusCode: 302, headers: { Location: 'https://github.com' } })
     expect(mockIncrementClicks).toHaveBeenCalledWith('abc123')
   })
 

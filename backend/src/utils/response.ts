@@ -15,7 +15,7 @@ export const conflict = (message: string) => json(409, { error: message })
 export const serverError = () => json(500, { error: 'Internal server error' })
 
 export const redirect = (location: string) => ({
-  statusCode: 301,
-  headers: { Location: location },
+  statusCode: 302,
+  headers: { Location: location, 'Cache-Control': 'no-store' },
   body: ''
 })
