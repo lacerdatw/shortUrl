@@ -1,0 +1,13 @@
+node_modules/
+.build/
+dist/
+coverage/
+
+.env
+.env.local
+.env.production
+
+.serverless/
+.esbuild/
+
+*.js.map
