@@ -1,0 +1,127 @@
+service: shorturl
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ${env:AWS_REGION, 'us-east-1'}
+  environment:
+    DYNAMODB_TABLE_URLS: ${self:service}-urls-${sls:stage}
+    DYNAMODB_TABLE_USERS: ${self:service}-users-${sls:stage}
+    JWT_SECRET: ${env:JWT_SECRET}
+    JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN, '24h'}
+    BASE_URL: ${env:BASE_URL}
+  httpApi:
+    cors:
+      allowedOrigins: '*'
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - OPTIONS
+  # Principle of least privilege: only the exact actions each resource requires
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+          Resource:
+            - !GetAtt UrlsTable.Arn
+            - !Sub '${UrlsTable.Arn}/index/userId-index'
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+          Resource:
+            - !GetAtt UsersTable.Arn
+
+functions:
+  register:
+    handler: src/functions/auth/register.handler
+    events:
+      - httpApi:
+          path: /auth/register
+          method: POST
+
+  login:
+    handler: src/functions/auth/login.handler
+    events:
+      - httpApi:
+          path: /auth/login
+          method: POST
+
+  createUrl:
+    handler: src/functions/urls/create.handler
+    events:
+      - httpApi:
+          path: /urls
+          method: POST
+
+  listUrls:
+    handler: src/functions/urls/list.handler
+    events:
+      - httpApi:
+          path: /urls
+          method: GET
+
+  redirectUrl:
+    handler: src/functions/urls/redirect.handler
+    events:
+      - httpApi:
+          path: /{code}
+          method: GET
+
+resources:
+  Resources:
+    UrlsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-urls-${sls:stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: code
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: code
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: userId-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-users-${sls:stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    target: node20
+    # AWS SDK v3 is built into the Lambda Node 20 runtime — no need to bundle it
+    exclude:
+      - '@aws-sdk/*'
