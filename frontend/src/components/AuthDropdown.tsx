@@ -28,40 +28,39 @@ export const AuthDropdown = ({ isOpen, onClose }: AuthDropdownProps) => {
     <div
       ref={ref}
       className={`
-        fixed top-16 right-4 z-50 w-72
-        transition-all duration-300 ease-out
+        fixed top-[4.5rem] right-4 z-50 w-68
+        transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
         ${isOpen
           ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 -translate-y-3 pointer-events-none'}
       `}
     >
-      <div className="card bg-base-100/90 backdrop-blur-lg shadow-xl border border-base-300/40">
+      <div className="card card-dash bg-base-100/85 backdrop-blur-xl shadow-lg">
         <div className="card-body gap-4 p-5">
+
           <div className="flex flex-col items-center gap-1 text-center">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-1">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.172 13.828a4 4 0 015.656 0l4 4a4 4 0 01-5.656 5.656l-1.102-1.101" />
+            <div className="w-9 h-9 rounded-full border-2 border-dashed border-primary/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m0 0L10.172 13.828" />
               </svg>
             </div>
-            <p className="font-semibold text-base-content text-sm">Create your short link</p>
-            <p className="text-base-content/50 text-xs">Sign in or create a free account to continue</p>
+            <p className="font-semibold text-base-content text-sm mt-1">
+              Sign in to shorten
+            </p>
+            <p className="text-base-content/40 text-xs">
+              Create a free account or sign in to continue
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
-            <button
-              className="btn btn-primary btn-block btn-sm"
-              onClick={() => go('/register')}
-            >
+            <button className="btn btn-primary btn-block btn-sm" onClick={() => go('/register')}>
               Create account
             </button>
-            <button
-              className="btn btn-ghost btn-block btn-sm"
-              onClick={() => go('/login')}
-            >
+            <button className="btn btn-ghost btn-block btn-sm" onClick={() => go('/login')}>
               Sign in
             </button>
           </div>
+
         </div>
       </div>
     </div>

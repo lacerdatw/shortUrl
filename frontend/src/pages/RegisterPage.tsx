@@ -13,12 +13,10 @@ export const RegisterPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
-
     if (password.length < 8) {
       setError('Password must be at least 8 characters.')
       return
     }
-
     setLoading(true)
     try {
       await register(email, password)
@@ -33,19 +31,27 @@ export const RegisterPage = () => {
 
   return (
     <main className="min-h-screen bg-base-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            short<span className="text-base-content">Url</span>
+      <div className="w-full max-w-sm flex flex-col gap-6">
+
+        <div className="text-center animate-fade-up" style={{ animationDelay: '0ms' }}>
+          <Link to="/" className="text-2xl font-bold tracking-tight">
+            <span className="text-primary">short</span>
+            <span className="text-base-content">Url</span>
           </Link>
-          <p className="text-base-content/50 text-sm mt-2">Create your account</p>
+          <p className="text-base-content/40 text-sm mt-1">Create your account</p>
         </div>
 
-        <div className="card bg-base-100 border border-base-300/50 shadow-sm">
-          <div className="card-body gap-4">
+        <div
+          className="card card-dash bg-base-100 animate-fade-up"
+          style={{ animationDelay: '80ms' }}
+        >
+          <div className="card-body gap-5">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <fieldset className="fieldset gap-1">
-                <label className="label text-xs text-base-content/60">Email</label>
+
+              <div className="flex flex-col gap-1 animate-fade-up" style={{ animationDelay: '140ms' }}>
+                <label className="text-xs font-medium text-base-content/50 uppercase tracking-wider">
+                  Email
+                </label>
                 <input
                   type="email"
                   className="input input-primary w-full"
@@ -54,10 +60,12 @@ export const RegisterPage = () => {
                   onChange={e => setEmail(e.target.value)}
                   required
                 />
-              </fieldset>
+              </div>
 
-              <fieldset className="fieldset gap-1">
-                <label className="label text-xs text-base-content/60">Password</label>
+              <div className="flex flex-col gap-1 animate-fade-up" style={{ animationDelay: '180ms' }}>
+                <label className="text-xs font-medium text-base-content/50 uppercase tracking-wider">
+                  Password
+                </label>
                 <input
                   type="password"
                   className="input input-primary w-full"
@@ -67,28 +75,35 @@ export const RegisterPage = () => {
                   required
                   minLength={8}
                 />
-              </fieldset>
+              </div>
 
               {error && (
-                <div className="alert alert-error alert-soft text-sm py-2">{error}</div>
+                <div role="alert" className="alert alert-error alert-dash text-sm py-2">
+                  {error}
+                </div>
               )}
 
               <button
                 type="submit"
-                className={`btn btn-primary btn-block mt-1 ${loading ? 'btn-disabled' : ''}`}
+                className="btn btn-primary btn-block animate-fade-up"
+                style={{ animationDelay: '220ms' }}
+                disabled={loading}
               >
                 {loading ? <span className="loading loading-spinner loading-sm" /> : 'Create account'}
               </button>
             </form>
 
-            <p className="text-center text-sm text-base-content/50">
+            <div className="divider text-xs text-base-content/30 my-0">or</div>
+
+            <p className="text-center text-sm text-base-content/40">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline">
+              <Link to="/login" className="text-primary font-medium hover:underline underline-offset-2">
                 Sign in
               </Link>
             </p>
           </div>
         </div>
+
       </div>
     </main>
   )

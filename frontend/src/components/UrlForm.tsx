@@ -57,11 +57,11 @@ export const UrlForm = ({ onDropdownOpen, onCreated }: UrlFormProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-3 w-full">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="url"
-          className="input input-primary flex-1 min-w-0"
+          className="input input-primary flex-1 min-w-0 bg-base-100"
           placeholder="https://your-very-long-url.com/goes/here"
           value={url}
           onChange={e => setUrl(e.target.value)}
@@ -69,7 +69,8 @@ export const UrlForm = ({ onDropdownOpen, onCreated }: UrlFormProps) => {
         />
         <button
           type="submit"
-          className={`btn btn-primary shrink-0 ${loading ? 'btn-disabled' : ''}`}
+          className="btn btn-primary shrink-0"
+          disabled={loading}
         >
           {loading
             ? <span className="loading loading-spinner loading-sm" />
@@ -78,15 +79,15 @@ export const UrlForm = ({ onDropdownOpen, onCreated }: UrlFormProps) => {
       </form>
 
       {error && (
-        <div className="alert alert-error alert-soft text-sm py-2">
+        <div role="alert" className="alert alert-error alert-dash text-sm py-2">
           {error}
         </div>
       )}
 
       {result && (
-        <div className="flex items-center gap-2 p-3 rounded-box bg-base-200 border border-base-300/60 animate-in fade-in duration-300">
+        <div className="flex items-center gap-2 px-3 py-2.5 rounded-box border border-dashed border-primary/40 bg-primary/5 animate-fade-in">
           <span className="text-primary font-mono text-sm flex-1 truncate">{result.shortUrl}</span>
-          <button className="btn btn-primary btn-sm shrink-0" onClick={handleCopy}>
+          <button className="btn btn-primary btn-soft btn-sm shrink-0" onClick={handleCopy}>
             {copied ? '✓ Copied' : 'Copy'}
           </button>
         </div>
